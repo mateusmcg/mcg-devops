@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins
+  labels:
+    app: jenkins
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      containers:
+      - name: jenkins
+        image: jenkins/jenkins
+        ports:
+        - containerPort: 8080
+        - containerPort: 50000
+        volumeMounts:
+          - mountPath: /test-pd
+            name: jenkins-volume
+      volumes:
+      - name: jenkins-volume
+        hostPath:
+          # directory location on host
+          path: /k8s-volume/Jenkins
+          # this field is optional
+          type: Directory
